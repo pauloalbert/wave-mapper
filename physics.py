@@ -8,9 +8,9 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
 #global constants
-n_total = 5              # needs to be changed
-D = 0.25                 # distance between speakers
-frequency = 1360         # frequency of output wave
+n_total = 8             # needs to be changed
+D = 0.02                # distance between speakers
+frequency = 10000        # frequency of output wave
 velocity = 340           # velocity of wave. constant which is dependant on the space
 amplitude = 1/n_total            # amplitude of the wave
 length = velocity / frequency
