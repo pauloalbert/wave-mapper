@@ -44,34 +44,70 @@ def area():
             print(n_sum(cx,cy,0), end=" ")
         print("")
 
+# RESULTS
+def wave():
+    time = np.arange(0, 1 / frequency, 0.1 / frequency)
+    ply.plot(time, [n_sum(1, 0, t) for t in time])
 
-if __name__ != "__main__":
-    time = np.arange(0, 1/frequency, 0.1/frequency)
-    ply.plot(time, [n_sum(1,0,t) for t in time])
-    ply.show()
-else:
+
+def colorGraph3D(mdist, Mdist, mwidth, Mwidth, fidelity = 0.01, ret = False):
+
+    x = np.arange(mdist, Mdist, fidelity)
+    y = np.arange(mwidth, Mwidth, fidelity)
+    X, Y = np.meshgrid(x, y)
+    zs = np.array(np.power(get_amplitude(np.ravel(X), np.ravel(Y)), 2))
+    Z = zs.reshape(X.shape)
+
+    if ret:
+        return np.array([X, Y, Z])
+    #return np.array([X, Y, Z])
+
     fig = ply.figure()
     ax = fig.add_subplot(111, projection='3d')
-    x = np.arange(-0.2, 3.8, 0.01)
-    y = np.arange(-1, 1, 0.01)
-    X, Y = np.meshgrid(x, y)
-    print(np.ravel(X))
-    zs = np.array(get_amplitude(np.ravel(X), np.ravel(Y)))
-    print(zs)
-    Z = zs.reshape(X.shape)
 
     surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
                        linewidth=0, antialiased=False)
 
-    ax.set_xlabel('X Label')
-    ax.set_ylabel('Y Label')
-    ax.set_zlabel('Z Label')
+
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Relative energy')
     # Customize the z axis.
     ax.set_zlim(0, 1.2)
     ax.zaxis.set_major_locator(LinearLocator(10))
     ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
-
+    ax.set_title("Sound energy from several sources")
     # Add a color bar which maps values to colors.
     fig.colorbar(surf, shrink=0.5, aspect=5)
 
+
+def polar(r, fidelity = np.pi/360):
+    THETA = np.arange(-np.pi/2, np.pi/2, fidelity)
+    rs = get_amplitude(np.ravel(r * np.cos(THETA)), np.ravel(r * np.sin(THETA)))
+    ax = ply.subplot(122, projection='polar')
+    ax.plot(THETA, 2*10*np.log(rs[0]))
+    ax.grid(True)
+    ax.set_xlabel('Intensity [db]')
+    ax.set_rlabel_position(220)
+    ax.set_title("Relative sound intensity at radius " + str(r) + "[m]", va='bottom')
+
+
+def radialNonPolar(r):
+    THETA = np.arange(-np.pi / 2, np.pi / 2, np.pi / 360)
+    rs = get_amplitude(np.ravel(r * np.cos(THETA)), np.ravel(r * np.sin(THETA)))
+    ax = ply.subplot(121)
+    ax.plot(THETA, rs[0])
+    ax.grid(False)
+    ax.set_xlabel("Theta[radians]")
+    ax.set_ylabel("Amplitude (relative to max amp)")
+    ax.set_title("sound amplitude at radius " + str(r) + "[m]", va='bottom')
+
+
+if __name__ != "__main__":
+    #animationGraph()
+    ply.show()
+else:
+    polar(2)
+    radialNonPolar(2)
+    colorGraph3D(-0.2, 3.8, -1, 1)
     ply.show()
