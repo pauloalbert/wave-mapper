@@ -2,8 +2,8 @@
 import math
 import matplotlib.pyplot as ply
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 
+from mpl_toolkits.mplot3d import Axes3D #important
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
@@ -36,6 +36,7 @@ def n_sum(x, y, t, split=False):
 
 def get_amplitude(x, y):
     return np.max((np.dstack((n_sum(x, y ,t) for t in np.linspace(0, 1/frequency, 100)))),axis=2)
+
 
 def area():
     for cy in range(-2, 2, 1):
